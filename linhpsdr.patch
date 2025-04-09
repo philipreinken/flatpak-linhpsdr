@@ -1,0 +1,55 @@
+diff --git a/Makefile.linux b/Makefile.linux
+index d83af66..d68f8155 100644
+--- a/Makefile.linux
++++ b/Makefile.linux
+@@ -46,18 +46,18 @@ endif
+ # needs :
+ #			https://github.com/m5evt/unixcw-3.5.1.git
+ 
+-CWDAEMON_INCLUDE=CWDAEMON
++#CWDAEMON_INCLUDE=CWDAEMON
+ 
+-ifeq ($(CWDAEMON_INCLUDE),CWDAEMON)
+-CWDAEMON_OPTIONS=-D CWDAEMON
+-CWDAEMON_LIBS=-lcw
+-CWDAEMON_SOURCES= \
+-cwdaemon.c
+-CWDAEMON_HEADERS= \
+-cwdaemon.h
+-CWDAEMON_OBJS= \
+-cwdaemon.o
+-endif
++#ifeq ($(CWDAEMON_INCLUDE),CWDAEMON)
++#CWDAEMON_OPTIONS=-D CWDAEMON
++#CWDAEMON_LIBS=-lcw
++#CWDAEMON_SOURCES= \
++#cwdaemon.c
++#CWDAEMON_HEADERS= \
++#cwdaemon.h
++#CWDAEMON_OBJS= \
++#cwdaemon.o
++#endif
+ 
+ # MIDI code from piHPSDR written by Christoph van Wullen, DL1YCF.
+ MIDI_INCLUDE=MIDI
+@@ -261,12 +261,14 @@ clean:
+ 	-rm -f $(PROGRAM)
+ 
+ install: $(PROGRAM)
+-	cp $(PROGRAM) /usr/local/bin
+-	if [ ! -d /usr/share/linhpsdr ]; then mkdir /usr/share/linhpsdr; fi
+-	cp hpsdr.png /usr/share/linhpsdr
+-	cp hpsdr_icon.png /usr/share/linhpsdr
+-	cp hpsdr_small.png /usr/share/linhpsdr
+-	cp linhpsdr.desktop /usr/share/applications
++	mkdir -p $(PREFIX)/usr/local/bin
++	mkdir -p $(PREFIX)/usr/share/applications
++	cp $(PROGRAM) $(PREFIX)/usr/local/bin
++	if [ ! -d $(PREFIX)/usr/share/linhpsdr ]; then mkdir $(PREFIX)/usr/share/linhpsdr; fi
++	cp hpsdr.png $(PREFIX)/usr/share/linhpsdr
++	cp hpsdr_icon.png $(PREFIX)/usr/share/linhpsdr
++	cp hpsdr_small.png $(PREFIX)/usr/share/linhpsdr
++	cp linhpsdr.desktop $(PREFIX)/usr/share/applications
+ 
+ debian:
+ 	cp $(PROGRAM) pkg/linhpsdr/usr/local/bin

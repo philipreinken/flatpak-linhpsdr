@@ -1,0 +1,64 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/flatpak/flatpak-builder/main/data/flatpak-manifest.schema.json
+
+id: com.github.g0orx.Linhpsdr
+runtime: org.freedesktop.Platform
+runtime-version: '23.08'
+sdk: org.freedesktop.Sdk
+command: /app/usr/local/bin/linhpsdr
+finish-args:
+  - --share=ipc
+  - --device=dri
+  - --socket=fallback-x11
+  - --socket=pulseaudio
+  - --socket=wayland
+  - --filesystem=xdg-download
+  - --share=network
+  - --socket=session-bus
+modules:
+  - name: linhpsdr
+    sources:
+      - type: git
+        url: https://github.com/g0orx/linhpsdr
+        commit: 02361708dbdd1a1401a492af71f066c870a6aad3
+      - type: patch
+        path: linhpsdr.patch
+        use-git: true
+    buildsystem: simple
+    build-commands:
+      - make LINK="gcc -L /app/lib"
+      - make install PREFIX=/app
+    modules:
+      - shared-modules/libusb/libusb.json
+      - shared-modules/linux-audio/fftw3f.json
+
+      - name: soapy
+        buildsystem: cmake
+        builddir: true
+        build-options:
+          libdir: lib
+        sources:
+          - type: git
+            url: https://github.com/pothosware/SoapySDR
+            commit: 1cf5a539a21414ff509ff7d0eedfc5fa8edb90c6
+
+      - name: soundio
+        buildsystem: cmake
+        builddir: true
+        build-options:
+          libdir: lib
+        sources:
+          - type: git
+            url: https://github.com/andrewrk/libsoundio
+            commit: 8accf164afcb4273dbb6236b04de4dff536ef883
+
+      - name: wdsp
+        buildsystem: simple
+        build-commands:
+          - make
+          - make install PREFIX=/app
+        build-options:
+          libdir: lib/wdsp
+        sources:
+          - type: git
+            url: https://github.com/g0orx/wdsp
+            commit: 49084f50c583a73644e03bcb56443fa9deb327de
