@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/flatpak/flatpak-builder/main/data/flatpak-manifest.schema.json
 
 ---
-id: com.github.g0orx.Linhpsdr
+id: com.github.g0orx.linhpsdr
 runtime: org.freedesktop.Platform
 runtime-version: "23.08"
 sdk: org.freedesktop.Sdk
@@ -12,7 +12,7 @@ finish-args:
   - --socket=fallback-x11
   - --socket=pulseaudio
   - --socket=wayland
-  - --filesystem=xdg-download
+  - --filesystem=xdg-data/linhpsdr:create
   - --share=network
   - --socket=session-bus
 modules:
@@ -24,12 +24,19 @@ modules:
       - type: patch
         path: linhpsdr.patch
         use-git: true
+      - type: file
+        path: com.github.g0orx.linhpsdr.metainfo.xml
+      - type: file
+        path: com.github.g0orx.linhpsdr.desktop
     buildsystem: simple
     build-commands:
       - make LINK="gcc -L /app/lib"
       - make install PREFIX=/app
+    post-install:
+      - install -Dm644 com.github.g0orx.linhpsdr.metainfo.xml -t /app/share/metainfo
+      - install -Dm644 com.github.g0orx.linhpsdr.desktop -t /app/share/applications
+      - install -Dm644 /app/usr/share/linhpsdr/hpsdr_small.png -T /app/share/icons/hicolor/128x128/apps/com.github.g0orx.linhpsdr.png
     modules:
-      - shared-modules/libusb/libusb.json
       - shared-modules/linux-audio/fftw3f.json
 
       - name: soapy
