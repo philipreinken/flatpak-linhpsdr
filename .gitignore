@@ -1,3 +1,5 @@
+/.make.*
+
 /.flatpak-builder/
-/builddir/
-/repo/
+/.build-*
+/.repo-*
