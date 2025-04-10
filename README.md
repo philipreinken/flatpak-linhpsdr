@@ -1,3 +1,21 @@
-### ToDo
+## flatpak-linhpsdr
 
-- [ ] Persist config directory
+This is a `flatpak` manifest for building and running [LinHPSDR](https://github.com/g0orx/linhpsdr).
+
+### Build
+
+```bash
+make build
+```
+
+### Quickstart
+
+```bash
+make install
+```
+
+This will install the application. You can run it with:
+
+```bash
+flatpak run com.github.g0orx.linhpsdr
+```
