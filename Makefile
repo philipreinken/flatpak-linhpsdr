@@ -21,11 +21,12 @@ endef
 .PHONY: build export serve stop install install-local-repo clean
 
 $(BUILD_DIR): $(MANIFEST)
-	flatpak-builder --force-clean --user --install-deps-from="flathub" $(BUILD_DIR) $<
+	dagger call \
+		build-directory export --path="$(BUILD_DIR)"
 
 $(REPO_DIR): $(BUILD_DIR)
-	flatpak build-export --gpg-sign="$(GPG_ID)" $(REPO_DIR) $(BUILD_DIR) $(shell git branch --show-current)
-	flatpak build-update-repo --generate-static-deltas --gpg-sign="$(GPG_ID)" $(REPO_DIR)
+	dagger call \
+		repo-directory export --path="$(REPO_DIR)"
 
 build: $(BUILD_DIR)
 

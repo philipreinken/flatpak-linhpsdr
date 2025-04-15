@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-    <id>io.github.g0orx.linhpsdr</id>
+    <id>com.github.g0orx.linhpsdr</id>
 
     <name>LinHPSDR</name>
     <summary>Linux HPSDR</summary>
@@ -14,7 +14,7 @@
         </p>
     </description>
 
-    <launchable type="desktop-id">io.github.g0orx.linhpsdr.desktop</launchable>
+    <launchable type="desktop-id">com.github.g0orx.linhpsdr.desktop</launchable>
     <screenshots>
         <screenshot type="default">
             <image>https://raw.githubusercontent.com/g0orx/linhpsdr/refs/heads/master/images/linhpsdr.png</image>
