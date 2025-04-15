@@ -18,7 +18,7 @@ Icon=
 GPGKey=$(shell gpg --export $(GPG_ID) | base64 --wrap=0)
 endef
 
-.PHONY: build export serve stop install install-local-repo clean
+.PHONY: build sign deploy serve stop install install-local-repo clean
 
 $(BUILD_DIR): $(MANIFEST)
 	dagger call \
@@ -30,7 +30,14 @@ $(REPO_DIR): $(BUILD_DIR)
 
 build: $(BUILD_DIR)
 
-export: $(REPO_DIR)
+sign: $(REPO_DIR)
+	flatpak build-sign --gpg-sign="$(GPG_ID)" $<
+	flatpak build-update-repo --gpg-sign="$(GPG_ID)" $<
+
+deploy: sign
+	dagger call deploy
+
+### Local Development ###
 
 serve: $(REPO_DIR) stop
 	docker run --rm -d \

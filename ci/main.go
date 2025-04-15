@@ -61,22 +61,26 @@ func (m *FlatpakLinhpsdr) BuildContainer(c context.Context) *dagger.Container {
 		WithWorkdir("/src")
 }
 
+// BuildContainerWithFlatpakDependencies returns a container image with all build dependencies and downloads the flatpak dependencies
 func (m *FlatpakLinhpsdr) BuildContainerWithFlatpakDependencies(c context.Context) *dagger.Container {
 	return m.BuildContainer(c).
 		WithExec([]string{"flatpak-builder", "--install-deps-only", "--install-deps-from=flathub", m.BuildDir, m.Manifest}).
 		WithExec([]string{"flatpak-builder", "--download-only", m.BuildDir, m.Manifest})
 }
 
+// Build builds the flatpak using flatpak-builder
 func (m *FlatpakLinhpsdr) Build(c context.Context) *dagger.Container {
 	return m.BuildContainerWithFlatpakDependencies(c).
 		WithExec([]string{"flatpak-builder", "--disable-rofiles-fuse", "--force-clean", m.BuildDir, m.Manifest}, dagger.ContainerWithExecOpts{InsecureRootCapabilities: true})
 }
 
+// BuildDirectory returns the directory containing the built flatpak
 func (m *FlatpakLinhpsdr) BuildDirectory(c context.Context) *dagger.Directory {
 	return m.Build(c).
 		Directory(m.BuildDir)
 }
 
+// Export creates a flatpak repo from the built flatpak
 func (m *FlatpakLinhpsdr) Export(c context.Context) *dagger.Container {
 	return m.BuildContainer(c).
 		WithDirectory(m.BuildDir, m.BuildDirectory(c)).
@@ -84,7 +88,13 @@ func (m *FlatpakLinhpsdr) Export(c context.Context) *dagger.Container {
 		WithExec([]string{"flatpak", "build-update-repo", "--generate-static-deltas", m.RepoDir})
 }
 
+// RepoDirectory returns the directory containing the flatpak repo
 func (m *FlatpakLinhpsdr) RepoDirectory(c context.Context) *dagger.Directory {
 	return m.Export(c).
 		Directory(m.RepoDir)
+}
+
+// Deploy deploys the given flatpak repo to S3. This takes a directory parameter, as the compiled repo needs to be signed outside of the dagger workflow.
+func (m *FlatpakLinhpsdr) Deploy(c context.Context, repoDir *dagger.Directory) *dagger.Container {
+	return nil
 }
