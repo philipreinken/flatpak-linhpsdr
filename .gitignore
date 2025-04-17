@@ -1,5 +1,6 @@
 /.make.*
 
 /.flatpak-builder/
+/.gpg
 /.build-*
 /.repo-*

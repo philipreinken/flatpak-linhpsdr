@@ -1,63 +1,38 @@
 
 NAME := com.github.g0orx.linhpsdr
-GPG_ID := 0x4F212E8A056A0CCC
-
+GPG_HOME := .gpg
+GPG_ID := flatpak-linhpsdr@rnkn.dev
 REPO_DIR := .repo-$(NAME)
 BUILD_DIR := .build-$(NAME)
+
 MANIFEST := $(NAME).yaml
+FLATPAKREPO := $(NAME).flatpakrepo
 
-FLATPAKREPO_LOCAL_DEST := /tmp/$(NAME).flatpakrepo
-define FLATPAKREPO_LOCAL
-[Flatpak Repo]
-Title=LinHPSDR (Local Debug Repository)
-Url=http://localhost:8000/
-Homepage=https://github.com/philipreinken/flatpak-linhpsdr
-Comment=
-Description=
-Icon=
-GPGKey=$(shell gpg --export $(GPG_ID) | base64 --wrap=0)
-endef
+DAGGER_CALL := dagger call --gpg-home-dir="$(GPG_HOME)" --gpg-key-id="$(GPG_ID)" --repo-path="$(REPO_DIR)" --build-path="$(BUILD_DIR)" --manifest-path="$(MANIFEST)"
 
-.PHONY: build sign deploy serve stop install install-local-repo clean
+.PHONY: build sign serve stop install install-local-repo clean
 
-$(BUILD_DIR): $(MANIFEST)
-	dagger call \
+$(BUILD_DIR):
+	$(DAGGER_CALL) \
 		build-directory export --path="$(BUILD_DIR)"
 
 $(REPO_DIR): $(BUILD_DIR)
-	dagger call \
-		repo-directory export --path="$(REPO_DIR)"
+	$(DAGGER_CALL) \
+		signed-repo-directory export --path="$(REPO_DIR)"
 
-build: $(BUILD_DIR)
+$(FLATPAKREPO): $(REPO_DIR)
+	$(DAGGER_CALL) \
+		flatpakrepo-file export --path="$@"
 
-sign: $(REPO_DIR)
-	flatpak build-sign --gpg-sign="$(GPG_ID)" $<
-	flatpak build-update-repo --gpg-sign="$(GPG_ID)" $<
+build: $(REPO_DIR)
 
-deploy: sign
-	dagger call deploy
+serve: $(REPO_DIR)
+	$(DAGGER_CALL) \
+		serve up
 
-### Local Development ###
-
-serve: $(REPO_DIR) stop
-	docker run --rm -d \
-		-p 8000:8000 \
-		-v $(shell pwd)/$(REPO_DIR):/srv \
-		--name=$(shell echo $(NAME) | base64 | tr -d '=') \
-		php:8.4-cli -S 0.0.0.0:8000 -t /srv
-
-stop:
-	docker stop -t1 $(shell echo $(NAME) | base64 | tr -d '=') > /dev/null 2>&1 || true
-
-# Quick install without generating a signed repo
-install: $(MANIFEST)
-	flatpak-builder --force-clean --user --install-deps-from="flathub" --install --repo="$(REPO_DIR)" $(BUILD_DIR) $<
-
-# Simulate full install using a locally hosted repo
-install-local-repo: serve
-	$(file > $(FLATPAKREPO_LOCAL_DEST), $(FLATPAKREPO_LOCAL))
-	flatpak remote-add --user --if-not-exists $(NAME)-local $(FLATPAKREPO_LOCAL_DEST)
-	flatpak install --reinstall --user $(NAME)-local $(NAME)
+install: serve
+	flatpak remote-add --user --if-not-exists $(NAME)-repo $(FLATPAKREPO)
+	flatpak install --reinstall --user $(NAME)-repo $(NAME)
 
 clean:
-	rm -rf $(BUILD_DIR) $(REPO_DIR)
+	rm -rf $(BUILD_DIR) $(REPO_DIR) $(FLATPAKREPO)
