@@ -11,7 +11,7 @@ jobs:
       - shell: bash
         run: |
           echo "${{ secrets.FLATPAK_REPO_SIGNING_KEY_HOME }}" | base64 -d | tar -xzf -
-      - uses: dagger/dagger-for-github@8.0.0
+      - uses: dagger/dagger-for-github@v7.0.6
         with:
           version: "latest"
           cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
