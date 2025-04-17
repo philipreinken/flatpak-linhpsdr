@@ -1,7 +1,7 @@
 
 NAME := com.github.g0orx.linhpsdr
 GPG_HOME := .gpg
-GPG_ID := flatpak-linhpsdr@rnkn.dev
+GPG_ID := 0x449FB7BE917E89D1163F18610D0EB7EC06BBDA5F
 REPO_DIR := .repo-$(NAME)
 BUILD_DIR := .build-$(NAME)
 

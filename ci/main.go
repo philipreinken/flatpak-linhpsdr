@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"dagger/flatpak-linhpsdr/internal/dagger"
-	"encoding/base64"
 	"fmt"
 )
 
@@ -12,7 +11,7 @@ const (
 	flatpakRepoTemplate     = `
 [Flatpak Repo]
 Title=LinHPSDR
-Url=https://flatpak-linhpsdr.rnkn.dev/repo
+Url=https://flatpak-linhpsdr.rnkn.dev
 Homepage=https://github.com/philipreinken/flatpak-linhpsdr
 Comment=
 Description=
@@ -135,10 +134,11 @@ func (m *FlatpakLinhpsdr) SignedRepoDirectory(c context.Context) *dagger.Directo
 		Directory(m.RepoPath)
 }
 
-// FlatpakrepoFile returns a .flatpakrepo file for easy installation
-func (m *FlatpakLinhpsdr) FlatpakrepoFile(c context.Context) (*dagger.File, error) {
+// PubKeyFile returns the public key used to sign the flatpak repo
+func (m *FlatpakLinhpsdr) PubKeyFile(c context.Context) (*dagger.File, error) {
 	out, err := m.BuildContainer(c).
-		WithExec([]string{"gpg", "--homedir", m.GpgHomePath, "--export", m.GpgKeyId}).
+		WithExec([]string{"gpg", "--no-permission-warning", "--homedir", m.GpgHomePath, "--output", "pubkey.gpg", "--export", m.GpgKeyId}).
+		WithExec([]string{"base64", "-w0", "pubkey.gpg"}).
 		Stdout(c)
 
 	if err != nil {
@@ -146,7 +146,21 @@ func (m *FlatpakLinhpsdr) FlatpakrepoFile(c context.Context) (*dagger.File, erro
 	}
 
 	return dag.Container().
-		WithNewFile("repo.flatpakrepo", fmt.Sprintf(flatpakRepoTemplate, base64.StdEncoding.EncodeToString([]byte(out)))).
+		WithNewFile("pubkey.gpg.b64", out).
+		File("pubkey.gpg.b64"), nil
+}
+
+// FlatpakrepoFile returns a .flatpakrepo file for easy installation
+func (m *FlatpakLinhpsdr) FlatpakrepoFile(c context.Context) (*dagger.File, error) {
+	f, err := m.PubKeyFile(c)
+	if err != nil {
+		return nil, err
+	}
+
+	key, err := f.Contents(c)
+
+	return dag.Container().
+		WithNewFile("repo.flatpakrepo", fmt.Sprintf(flatpakRepoTemplate, key)).
 		File("repo.flatpakrepo"), nil
 }
 
