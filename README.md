@@ -34,3 +34,8 @@ For a list of possible tasks, checkout this repo and run
 dagger functions
 ```
 
+### Addendum
+
+This project is not an official build or distribution of LinHPSDR and mainly a
+learning exercise, so YMMV.
+
