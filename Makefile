@@ -18,7 +18,7 @@ $(BUILD_DIR):
 
 $(REPO_DIR): $(BUILD_DIR)
 	$(DAGGER_CALL) \
-		signed-repo-directory export --path="$(REPO_DIR)"
+		repo-directory export --path="$(REPO_DIR)"
 
 $(FLATPAKREPO): $(REPO_DIR)
 	$(DAGGER_CALL) \

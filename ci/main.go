@@ -110,28 +110,13 @@ func (m *FlatpakLinhpsdr) BuildDirectory(c context.Context) *dagger.Directory {
 func (m *FlatpakLinhpsdr) Export(c context.Context) *dagger.Container {
 	return m.BuildContainer(c).
 		WithDirectory(m.BuildPath, m.BuildDirectory(c)).
-		WithExec([]string{"flatpak", "build-export", m.RepoPath, m.BuildPath, "main"}).
-		WithExec([]string{"flatpak", "build-update-repo", "--generate-static-deltas", m.RepoPath})
+		WithExec([]string{"flatpak", "build-export", "--gpg-sign=" + m.GpgKeyId, "--gpg-homedir=" + m.GpgHomePath, m.RepoPath, m.BuildPath, "main"}).
+		WithExec([]string{"flatpak", "build-update-repo", "--gpg-sign=" + m.GpgKeyId, "--gpg-homedir=" + m.GpgHomePath, "--generate-static-deltas", m.RepoPath})
 }
 
 // RepoDirectory returns the directory containing the flatpak repo
 func (m *FlatpakLinhpsdr) RepoDirectory(c context.Context) *dagger.Directory {
-	return m.Export(c).
-		Directory(m.RepoPath)
-}
-
-// ExportAndSign signs the flatpak repo using gpg
-func (m *FlatpakLinhpsdr) ExportAndSign(c context.Context) *dagger.Container {
-	return m.BuildContainer(c).
-		WithDirectory(m.RepoPath, m.RepoDirectory(c)).
-		WithExec([]string{"flatpak", "build-sign", "--gpg-sign=" + m.GpgKeyId, "--gpg-homedir=" + m.GpgHomePath, m.RepoPath}).
-		WithExec([]string{"flatpak", "build-update-repo", "--gpg-sign=" + m.GpgKeyId, "--gpg-homedir=" + m.GpgHomePath, m.RepoPath})
-}
-
-// SignedRepoDirectory returns the directory containing the signed flatpak repo
-func (m *FlatpakLinhpsdr) SignedRepoDirectory(c context.Context) *dagger.Directory {
-	return m.ExportAndSign(c).
-		Directory(m.RepoPath)
+	return m.Export(c).Directory(m.RepoPath)
 }
 
 // PubKeyFile returns the public key used to sign the flatpak repo
@@ -166,7 +151,7 @@ func (m *FlatpakLinhpsdr) FlatpakrepoFile(c context.Context) (*dagger.File, erro
 
 func (m *FlatpakLinhpsdr) Serve(c context.Context) *dagger.Service {
 	return dag.Container().From("python:3-slim").
-		WithDirectory(m.RepoPath, m.SignedRepoDirectory(c)).
+		WithDirectory(m.RepoPath, m.RepoDirectory(c)).
 		WithExposedPort(8080).
 		WithExec([]string{"python3", "-m", "http.server", "8080"}).
 		AsService()
