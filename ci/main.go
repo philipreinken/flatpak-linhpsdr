@@ -31,28 +31,28 @@ type FlatpakLinhpsdr struct {
 }
 
 func New(
-// The source code to build the flatpak
-// +optional
+	// The source code to build the flatpak
+	// +optional
 	Source *dagger.Directory,
-// The manifest file to use
-// +optional
-// +default="com.github.g0orx.linhpsdr.yaml"
+	// The manifest file to use
+	// +optional
+	// +default="com.github.g0orx.linhpsdr.yaml"
 	ManifestPath string,
-// The build directory
-// +optional
-// +default=".build-com.github.g0orx.linhpsdr"
+	// The build directory
+	// +optional
+	// +default=".build-com.github.g0orx.linhpsdr"
 	BuildPath string,
-// The repository directory
-// +optional
-// +default=".repo-com.github.g0orx.linhpsdr"
+	// The repository directory
+	// +optional
+	// +default=".repo-com.github.g0orx.linhpsdr"
 	RepoPath string,
-// The Path where the GPG home directory will be mounted
-// +optional
-// +default=".gpg"
+	// The Path where the GPG home directory will be mounted
+	// +optional
+	// +default=".gpg"
 	GpgHomePath string,
-// The GPG key ID to use for signing
+	// The GPG key ID to use for signing
 	GpgKeyId string,
-// The GPG home directory
+	// The GPG home directory
 	GpgHomeDir *dagger.Directory,
 ) *FlatpakLinhpsdr {
 	if Source == nil {
