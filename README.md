@@ -34,6 +34,10 @@ For a list of possible tasks, checkout this repo and run
 dagger functions
 ```
 
+### TODO
+
+- [ ] Implement automatic dependency updates
+
 ### Addendum
 
 This project is not an official build or distribution of LinHPSDR and mainly a
