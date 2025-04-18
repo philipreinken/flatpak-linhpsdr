@@ -5,8 +5,8 @@ on:
     - cron: "0 * * * *"
   workflow_dispatch:
 
-#permissions:
-#  pull-requests: write
+permissions:
+  pull-requests: write
 
 jobs:
   flatpak-external-data-checker:
