@@ -31,28 +31,28 @@ type FlatpakLinhpsdr struct {
 }
 
 func New(
-	// The source code to build the flatpak
-	// +optional
+// The source code to build the flatpak
+// +optional
 	Source *dagger.Directory,
-	// The manifest file to use
-	// +optional
-	// +default="com.github.g0orx.linhpsdr.yaml"
+// The manifest file to use
+// +optional
+// +default="com.github.g0orx.linhpsdr.yaml"
 	ManifestPath string,
-	// The build directory
-	// +optional
-	// +default=".build-com.github.g0orx.linhpsdr"
+// The build directory
+// +optional
+// +default=".build-com.github.g0orx.linhpsdr"
 	BuildPath string,
-	// The repository directory
-	// +optional
-	// +default=".repo-com.github.g0orx.linhpsdr"
+// The repository directory
+// +optional
+// +default=".repo-com.github.g0orx.linhpsdr"
 	RepoPath string,
-	// The Path where the GPG home directory will be mounted
-	// +optional
-	// +default=".gpg"
+// The Path where the GPG home directory will be mounted
+// +optional
+// +default=".gpg"
 	GpgHomePath string,
-	// The GPG key ID to use for signing
+// The GPG key ID to use for signing
 	GpgKeyId string,
-	// The GPG home directory
+// The GPG home directory
 	GpgHomeDir *dagger.Directory,
 ) *FlatpakLinhpsdr {
 	if Source == nil {
@@ -82,8 +82,7 @@ func (m *FlatpakLinhpsdr) BuildContainer(c context.Context) *dagger.Container {
 		WithExec([]string{"apt-get", "update"}).
 		WithExec([]string{"apt-get", "install", "-y", "flatpak-builder", "flatpak", "gpg"}).
 		WithExec([]string{"flatpak", "remote-add", "--if-not-exists", "flathub", "https://flathub.org/repo/flathub.flatpakrepo"}).
-		WithDirectory("/src", m.Source).
-		WithWorkdir("/src").
+		With(m.withSourceDir(true)).
 		With(m.withGpgHomeDir())
 }
 
@@ -155,6 +154,34 @@ func (m *FlatpakLinhpsdr) Serve(c context.Context) *dagger.Service {
 		WithExposedPort(8080).
 		WithExec([]string{"python3", "-m", "http.server", "8080"}).
 		AsService()
+}
+
+func (m *FlatpakLinhpsdr) UpdateCheck(c context.Context, update bool) *dagger.Container {
+	var args []string
+
+	args = append(args, "/app/flatpak-external-data-checker")
+
+	if update {
+		args = append(args, "--update", "--never-fork")
+	}
+
+	args = append(args, m.ManifestPath)
+
+	return dag.Container().From("ghcr.io/flathub/flatpak-external-data-checker:latest").
+		With(m.withSourceDir(true)).
+		WithExec(args)
+}
+
+func (m *FlatpakLinhpsdr) withSourceDir(cwd bool) dagger.WithContainerFunc {
+	return func(c *dagger.Container) *dagger.Container {
+		ret := c.WithDirectory("/src", m.Source)
+
+		if cwd {
+			return ret.WithWorkdir("/src")
+		}
+
+		return ret
+	}
 }
 
 func (m *FlatpakLinhpsdr) withGpgHomeDir() dagger.WithContainerFunc {

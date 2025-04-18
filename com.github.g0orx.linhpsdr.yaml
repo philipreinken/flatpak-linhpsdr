@@ -20,6 +20,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/g0orx/linhpsdr
+        branch: master
         commit: 02361708dbdd1a1401a492af71f066c870a6aad3
       - type: patch
         path: linhpsdr.patch
@@ -45,6 +46,7 @@ modules:
         sources:
           - type: git
             url: https://github.com/pothosware/SoapySDR
+            branch: master
             commit: 1cf5a539a21414ff509ff7d0eedfc5fa8edb90c6
 
       - name: soundio
@@ -53,6 +55,7 @@ modules:
         sources:
           - type: git
             url: https://github.com/andrewrk/libsoundio
+            tag: "2.0.1-7"
             commit: 8accf164afcb4273dbb6236b04de4dff536ef883
 
       - name: wdsp
@@ -63,4 +66,5 @@ modules:
         sources:
           - type: git
             url: https://github.com/g0orx/wdsp
+            branch: master
             commit: 49084f50c583a73644e03bcb56443fa9deb327de
