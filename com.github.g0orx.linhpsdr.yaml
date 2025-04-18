@@ -1,9 +1,6 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/flatpak/flatpak-builder/main/data/flatpak-manifest.schema.json
-
----
 id: com.github.g0orx.linhpsdr
 runtime: org.freedesktop.Platform
-runtime-version: "23.08"
+runtime-version: '23.08'
 sdk: org.freedesktop.Sdk
 command: /app/usr/local/bin/linhpsdr
 finish-args:
@@ -47,7 +44,7 @@ modules:
           - type: git
             url: https://github.com/pothosware/SoapySDR
             branch: master
-            commit: 1cf5a539a21414ff509ff7d0eedfc5fa8edb90c6
+            commit: fbf9f3c328868f46029284716df49095ab7b99a6
 
       - name: soundio
         buildsystem: cmake
@@ -55,7 +52,7 @@ modules:
         sources:
           - type: git
             url: https://github.com/andrewrk/libsoundio
-            tag: "2.0.1-7"
+            tag: 2.0.1-7
             commit: 8accf164afcb4273dbb6236b04de4dff536ef883
 
       - name: wdsp
