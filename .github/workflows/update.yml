@@ -1,8 +1,8 @@
 # Copied over from https://github.com/flathub-infra/flatpak-external-data-checker?tab=readme-ov-file#custom-workflow
 
 on:
-  schedule:
-    - cron: "0 * * * *"
+  schedule: # Daily at 05:00 UTC
+    - cron: '0 5 * * *'
   workflow_dispatch:
 
 permissions:
