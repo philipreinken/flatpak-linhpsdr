@@ -44,7 +44,7 @@ modules:
           - type: git
             url: https://github.com/pothosware/SoapySDR
             branch: master
-            commit: fbf9f3c328868f46029284716df49095ab7b99a6
+            commit: 640ac414f7c8bd77a581661d5d99372cd79419f3
 
       - name: soundio
         buildsystem: cmake
