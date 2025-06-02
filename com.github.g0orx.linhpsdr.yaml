@@ -18,7 +18,7 @@ modules:
       - type: git
         url: https://github.com/g0orx/linhpsdr
         branch: master
-        commit: 02361708dbdd1a1401a492af71f066c870a6aad3
+        commit: 8e53b3ae378f0e3c413f992ba8b2aeee4524d785
       - type: patch
         path: linhpsdr.patch
         use-git: true
