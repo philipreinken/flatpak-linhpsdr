@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	buildContainerBaseImage = "debian@sha256:b1211f6d19afd012477bd34fdcabb6b663d680e0f4b0537da6e6b0fd057a3ec3" // bookworm-slim
+	buildContainerBaseImage = "debian@sha256:c85a2732e97694ea77237c61304b3bb410e0e961dd6ee945997a06c788c545bb" // trixie-slim
 	flatpakRepoTemplate     = `
 [Flatpak Repo]
 Title=LinHPSDR
