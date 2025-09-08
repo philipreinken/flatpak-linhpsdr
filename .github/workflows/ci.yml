@@ -29,6 +29,7 @@ jobs:
           cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
           verb: call
           args: >-
+            --source="."
             --gpg-home-dir=".gpg"
             --gpg-key-id="${{ vars.FLATPAK_REPO_SIGNING_KEY_ID }}"
             repo-directory
@@ -39,6 +40,7 @@ jobs:
           cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
           verb: call
           args: >-
+            --source="."
             --gpg-home-dir=".gpg"
             --gpg-key-id="${{ vars.FLATPAK_REPO_SIGNING_KEY_ID }}"
             flatpakrepo-file
