@@ -1,6 +1,8 @@
 {
   "name": "flatpak-linhpsdr",
-  "engineVersion": "v0.18.2",
-  "sdk": "go",
+  "engineVersion": "v0.18.16",
+  "sdk": {
+    "source": "go"
+  },
   "source": "ci"
 }
