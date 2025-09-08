@@ -34,6 +34,8 @@ modules:
       - install -Dm644 com.github.g0orx.linhpsdr.metainfo.xml -t /app/share/metainfo
       - install -Dm644 com.github.g0orx.linhpsdr.desktop -t /app/share/applications
       - install -Dm644 /app/usr/share/linhpsdr/hpsdr_small.png -T /app/usr/share/icons/hicolor/128x128/apps/com.github.g0orx.linhpsdr.png
+    cleanup:
+      - "/usr"
     modules:
       - shared-modules/linux-audio/fftw3f.json
 
