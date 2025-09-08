@@ -1,6 +1,6 @@
 id: com.github.g0orx.linhpsdr
 runtime: org.freedesktop.Platform
-runtime-version: '23.08'
+runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 command: /app/usr/local/bin/linhpsdr
 finish-args:
