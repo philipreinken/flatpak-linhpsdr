@@ -1,6 +1,6 @@
 id: com.github.g0orx.linhpsdr
 runtime: org.freedesktop.Platform
-runtime-version: '24.08'
+runtime-version: '23.08'
 sdk: org.freedesktop.Sdk
 command: /app/usr/local/bin/linhpsdr
 finish-args:
@@ -34,8 +34,6 @@ modules:
       - install -Dm644 com.github.g0orx.linhpsdr.metainfo.xml -t /app/share/metainfo
       - install -Dm644 com.github.g0orx.linhpsdr.desktop -t /app/share/applications
       - install -Dm644 /app/usr/share/linhpsdr/hpsdr_small.png -T /app/share/icons/hicolor/128x128/apps/com.github.g0orx.linhpsdr.png
-    cleanup:
-      - "/usr"
     modules:
       - shared-modules/linux-audio/fftw3f.json
 
