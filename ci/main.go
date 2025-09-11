@@ -109,7 +109,7 @@ func (m *FlatpakLinhpsdr) BuildDirectory(c context.Context) *dagger.Directory {
 func (m *FlatpakLinhpsdr) Export(c context.Context) *dagger.Container {
 	return m.BuildContainer(c).
 		WithDirectory(m.BuildPath, m.BuildDirectory(c)).
-		WithExec([]string{"flatpak", "build-export", "--gpg-sign=" + m.GpgKeyId, "--gpg-homedir=" + m.GpgHomePath, m.RepoPath, m.BuildPath, "main"}).
+		WithExec([]string{"flatpak", "build-export", "--disable-sandbox", "--gpg-sign=" + m.GpgKeyId, "--gpg-homedir=" + m.GpgHomePath, m.RepoPath, m.BuildPath, "main"}).
 		WithExec([]string{"flatpak", "build-update-repo", "--gpg-sign=" + m.GpgKeyId, "--gpg-homedir=" + m.GpgHomePath, "--generate-static-deltas", m.RepoPath})
 }
 
