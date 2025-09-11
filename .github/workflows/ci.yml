@@ -19,7 +19,7 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - shell: bash
         run: |
           echo -n "${{ secrets.FLATPAK_REPO_SIGNING_KEY_HOME }}" | base64 -d | tar -xzf -
