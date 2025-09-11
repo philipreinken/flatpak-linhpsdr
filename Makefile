@@ -9,7 +9,7 @@ SHARED_MODULES_DIR := shared-modules
 MANIFEST := $(NAME).yaml
 FLATPAKREPO := $(NAME).flatpakrepo
 
-DAGGER_CALL := dagger call --gpg-home-dir="$(GPG_HOME)" --gpg-key-id="$(GPG_ID)" --repo-path="$(REPO_DIR)" --build-path="$(BUILD_DIR)" --manifest-path="$(MANIFEST)"
+DAGGER_CALL := dagger call --gpg-home-dir="$(GPG_HOME)" --gpg-key-id="$(GPG_ID)" --repo-path="$(REPO_DIR)" --build-path="$(BUILD_DIR)" --manifest-path="$(MANIFEST)" --source="."
 
 .PHONY: build sign serve stop install install-local-repo clean
 
