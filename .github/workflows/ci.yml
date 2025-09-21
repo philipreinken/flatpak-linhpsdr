@@ -5,14 +5,14 @@ on:
     - main
     paths:
       - ".gitmodules"
-      - "com.github.g0orx.linhpsdr.*"
+      - "io.github.g0orx.linhpsdr.*"
       - "*.patch"
   pull_request:
     branches:
     - main
     paths:
       - ".gitmodules"
-      - "com.github.g0orx.linhpsdr.*"
+      - "io.github.g0orx.linhpsdr.*"
       - "*.patch"
 
 jobs:
