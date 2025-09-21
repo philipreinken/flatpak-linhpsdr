@@ -21,7 +21,7 @@ file and opening it with your distro's GUI package manager, some support this.
 Afterwards, the flatpak may be installed:
 
 ```bash
-flatpak --user install <name> com.github.g0orx.linhpsdr
+flatpak --user install <name> io.github.g0orx.linhpsdr
 ```
 
 ### Build
