@@ -11,6 +11,10 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-only</project_license>
 
+  <provides>
+    <id>linhpsdr.desktop</id>
+  </provides>
+
   <description>
     <p>
       An HPSDR (High Performance Software Defined Radio) application for controlling HPSDR compatible radios,
