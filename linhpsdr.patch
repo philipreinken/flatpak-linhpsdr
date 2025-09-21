@@ -1,5 +1,5 @@
 diff --git a/Makefile.linux b/Makefile.linux
-index d83af66..d68f8155 100644
+index d83af66..15f605a 100644
 --- a/Makefile.linux
 +++ b/Makefile.linux
 @@ -46,18 +46,18 @@ endif
@@ -32,7 +32,7 @@ index d83af66..d68f8155 100644
  
  # MIDI code from piHPSDR written by Christoph van Wullen, DL1YCF.
  MIDI_INCLUDE=MIDI
-@@ -261,12 +261,14 @@ clean:
+@@ -261,12 +261,15 @@ clean:
  	-rm -f $(PROGRAM)
  
  install: $(PROGRAM)
@@ -42,31 +42,39 @@ index d83af66..d68f8155 100644
 -	cp hpsdr_icon.png /usr/share/linhpsdr
 -	cp hpsdr_small.png /usr/share/linhpsdr
 -	cp linhpsdr.desktop /usr/share/applications
-+	mkdir -p $(PREFIX)/usr/local/bin
-+	mkdir -p $(PREFIX)/usr/share/applications
-+	cp $(PROGRAM) $(PREFIX)/usr/local/bin
-+	if [ ! -d $(PREFIX)/usr/share/linhpsdr ]; then mkdir $(PREFIX)/usr/share/linhpsdr; fi
-+	cp hpsdr.png $(PREFIX)/usr/share/linhpsdr
-+	cp hpsdr_icon.png $(PREFIX)/usr/share/linhpsdr
-+	cp hpsdr_small.png $(PREFIX)/usr/share/linhpsdr
-+	cp linhpsdr.desktop $(PREFIX)/usr/share/applications
++	mkdir -p $(PREFIX)/bin
++	mkdir -p $(PREFIX)/share/icons/hicolor/512x512/apps
++	mkdir -p $(PREFIX)/share/applications
++	cp $(PROGRAM) $(PREFIX)/bin
++	if [ ! -d $(PREFIX)/share/linhpsdr ]; then mkdir $(PREFIX)/share/linhpsdr; fi
++	cp hpsdr.png $(PREFIX)/share/linhpsdr
++	cp hpsdr_icon.png $(PREFIX)/share/icons/hicolor/512x512/apps/io.github.g0orx.linhpsdr.png
++	cp hpsdr_small.png $(PREFIX)/share/linhpsdr
++	cp linhpsdr.desktop $(PREFIX)/share/applications/io.github.g0orx.linhpsdr.desktop
  
  debian:
  	cp $(PROGRAM) pkg/linhpsdr/usr/local/bin
 diff --git a/linhpsdr.desktop b/linhpsdr.desktop
-index a2c1162..5affd84 100644
+index a2c1162..9239c7d 100644
 --- a/linhpsdr.desktop
 +++ b/linhpsdr.desktop
-@@ -4,6 +4,6 @@ Type=Application
+@@ -1,9 +1,9 @@
+ [Desktop Entry]
+-Version=0.1
++Version=1.0
+ Type=Application
  Terminal=false
- Name[eb_GB]=linHPSDR
+-Name[eb_GB]=linHPSDR
++Name=LinHPSDR
++Comment=Linux HPSDR
  Exec=linhpsdr
 -Icon=/usr/share/linhpsdr/hpsdr_small.png
-+Icon=/app/usr/share/linhpsdr/hpsdr_small.png
- Name=linHPSDR
- 
+-Name=linHPSDR
+-
++Icon=io.github.g0orx.linhpsdr
++Categories=AudioVideo;Audio;Network;HamRadio;
 diff --git a/main.c b/main.c
-index 2d36744..b6486c4 100644
+index 2d36744..33e4d41 100644
 --- a/main.c
 +++ b/main.c
 @@ -501,7 +501,7 @@ static void activate_hpsdr(GtkApplication *app, gpointer data) {
@@ -74,7 +82,7 @@ index 2d36744..b6486c4 100644
  
  //#ifdef __APPLE__
 -  sprintf(png_path,"/usr/local/share/linhpsdr/hpsdr.png");
-+  sprintf(png_path,"/app/usr/share/linhpsdr/hpsdr.png");
++  sprintf(png_path,"/app/share/linhpsdr/hpsdr.png");
  //#else
  //  sprintf(png_path,"/usr/share/linhpsdr/hpsdr.png");
  //#endif

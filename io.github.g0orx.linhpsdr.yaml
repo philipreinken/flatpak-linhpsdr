@@ -1,0 +1,61 @@
+id: io.github.g0orx.linhpsdr
+runtime: org.freedesktop.Platform
+runtime-version: '25.08'
+sdk: org.freedesktop.Sdk
+command: linhpsdr
+finish-args:
+  - --share=ipc
+  - --device=dri
+  - --socket=fallback-x11
+  - --socket=pulseaudio
+  - --socket=wayland
+  - --share=network
+  - --persist=.local/share/linhpsdr
+  - --own-name=org.g0orx.hpsdr.*
+modules:
+  - shared-modules/linux-audio/fftw3f.json
+
+  - name: soapy
+    buildsystem: cmake-ninja
+    builddir: true
+    sources:
+      - type: git
+        url: https://github.com/pothosware/SoapySDR
+        commit: 1667b4e6301d7ad47b340dcdcd6e9969bf57d843
+
+  - name: soundio
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+    sources:
+      - type: git
+        url: https://github.com/andrewrk/libsoundio
+        tag: 2.0.1-7
+        commit: 8accf164afcb4273dbb6236b04de4dff536ef883
+
+  - name: wdsp
+    no-autogen: true
+    build-options:
+      env:
+        PREFIX: /app
+    sources:
+      - type: git
+        url: https://github.com/g0orx/wdsp
+        commit: 49084f50c583a73644e03bcb56443fa9deb327de
+
+  - name: linhpsdr
+    buildsystem: simple
+    build-commands:
+      - make LINK="gcc -L /app/lib"
+      - make install PREFIX=/app
+    sources:
+      - type: git
+        url: https://github.com/g0orx/linhpsdr
+        commit: 87a629072b8375ee7ce586f4cd30ac0cb352593a
+      - type: patch
+        path: linhpsdr.patch
+      - type: file
+        path: io.github.g0orx.linhpsdr.metainfo.xml
+    post-install:
+      - install -Dm644 io.github.g0orx.linhpsdr.metainfo.xml -t /app/share/metainfo
