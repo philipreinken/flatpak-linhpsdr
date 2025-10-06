@@ -15,7 +15,7 @@ remote via CLI:
 flatpak --user remote-add <name> "https://flatpak-linhpsdr.rnkn.dev/main.flatpakrepo"
 ```
 
-...or by downloading the [main.flatpakrepo](https://flatpak-linhpsdr.rnkn.dev/main.flatpakrepo)
+...or by downloading the [linhpsdr.flatpakrepo](https://flatpak-linhpsdr.rnkn.dev/linhpsdr.flatpakrepo)
 file and opening it with your distro's GUI package manager, some support this.
 
 Afterwards, the flatpak may be installed:
