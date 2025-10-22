@@ -12,7 +12,7 @@ In order to install using the hosted repo, you may add this repo's flatpak
 remote via CLI:
 
 ```bash
-flatpak --user remote-add <name> "https://flatpak-linhpsdr.rnkn.dev/main.flatpakrepo"
+flatpak --user remote-add linhpsdr "https://flatpak-linhpsdr.rnkn.dev/linhpsdr.flatpakrepo"
 ```
 
 ...or by downloading the [linhpsdr.flatpakrepo](https://flatpak-linhpsdr.rnkn.dev/linhpsdr.flatpakrepo)
@@ -21,7 +21,7 @@ file and opening it with your distro's GUI package manager, some support this.
 Afterwards, the flatpak may be installed:
 
 ```bash
-flatpak --user install <name> io.github.g0orx.linhpsdr
+flatpak --user install linhpsdr io.github.g0orx.linhpsdr
 ```
 
 ### Build
