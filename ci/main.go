@@ -101,6 +101,13 @@ func (m *FlatpakLinhpsdr) BuildContainerWithFlatpakDependencies(c context.Contex
 
 // Build builds the flatpak using flatpak-builder
 func (m *FlatpakLinhpsdr) Build(c context.Context) *dagger.Container {
+
+	/*
+	 * TODO: To merge x86 and arm64 apps, provide existing repository, either by downloading previous artifact or (somehow?) fetching it from the flatpak repo.
+	 *       > You can put more than one application in the same repository by using the same --repo path for multiple invocations of flatpak-builder.
+	 *       See: https://docs.flatpak.org/en/latest/flatpak-builder.html#exporting
+	 */
+
 	return m.BuildContainerWithFlatpakDependencies(c).
 		WithExec([]string{"flatpak-builder", "--arch", m.Arch, "--disable-rofiles-fuse", "--force-clean", m.BuildPath, m.ManifestPath}, dagger.ContainerWithExecOpts{InsecureRootCapabilities: true})
 }
