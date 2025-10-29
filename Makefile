@@ -1,5 +1,5 @@
 
-NAME := com.github.g0orx.linhpsdr
+NAME := io.github.g0orx.linhpsdr
 GPG_HOME := .gpg
 GPG_ID := 0x449FB7BE917E89D1163F18610D0EB7EC06BBDA5F
 REPO_DIR := .repo-$(NAME)
@@ -8,8 +8,9 @@ SHARED_MODULES_DIR := shared-modules
 
 MANIFEST := $(NAME).yaml
 FLATPAKREPO := $(NAME).flatpakrepo
+ARCH := x86_64
 
-DAGGER_CALL := dagger call --gpg-home-dir="$(GPG_HOME)" --gpg-key-id="$(GPG_ID)" --repo-path="$(REPO_DIR)" --build-path="$(BUILD_DIR)" --manifest-path="$(MANIFEST)" --source="."
+DAGGER_CALL := dagger call --gpg-home-dir="$(GPG_HOME)" --gpg-key-id="$(GPG_ID)" --repo-path="$(REPO_DIR)" --build-path="$(BUILD_DIR)" --manifest-path="$(MANIFEST)" --source="." --arch="$(ARCH)"
 
 .PHONY: build sign serve stop install install-local-repo clean
 

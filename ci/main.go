@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	buildContainerBaseImage = "debian@sha256:c85a2732e97694ea77237c61304b3bb410e0e961dd6ee945997a06c788c545bb" // trixie-slim
+	buildContainerBaseImage = "debian@sha256:66b37a5078a77098bfc80175fb5eb881a3196809242fd295b25502854e12cbec" // trixie-slim
 	flatpakRepoTemplate     = `
 [Flatpak Repo]
 Title=LinHPSDR
@@ -22,6 +22,7 @@ GPGKey=%s
 
 type FlatpakLinhpsdr struct {
 	Source       *dagger.Directory
+	Arch         string
 	ManifestPath string
 	BuildPath    string
 	RepoPath     string
@@ -34,6 +35,10 @@ func New(
 	// The source code to build the flatpak
 	// +optional
 	Source *dagger.Directory,
+	// The arch to build for
+	// +optional
+	// +default="x86_64"
+	Arch string,
 	// The manifest file to use
 	// +optional
 	// +default="io.github.g0orx.linhpsdr.yaml"
@@ -67,6 +72,7 @@ func New(
 
 	return &FlatpakLinhpsdr{
 		Source:       Source.WithoutDirectory(BuildPath).WithoutDirectory(".flatpak-builder"),
+		Arch:         Arch,
 		ManifestPath: ManifestPath,
 		BuildPath:    BuildPath,
 		RepoPath:     RepoPath,
@@ -89,14 +95,14 @@ func (m *FlatpakLinhpsdr) BuildContainer(c context.Context) *dagger.Container {
 // BuildContainerWithFlatpakDependencies returns a container image with all build dependencies and downloads the flatpak dependencies
 func (m *FlatpakLinhpsdr) BuildContainerWithFlatpakDependencies(c context.Context) *dagger.Container {
 	return m.BuildContainer(c).
-		WithExec([]string{"flatpak-builder", "--install-deps-only", "--install-deps-from=flathub", m.BuildPath, m.ManifestPath}).
-		WithExec([]string{"flatpak-builder", "--download-only", m.BuildPath, m.ManifestPath})
+		WithExec([]string{"flatpak-builder", "--arch", m.Arch, "--install-deps-only", "--install-deps-from=flathub", m.BuildPath, m.ManifestPath}).
+		WithExec([]string{"flatpak-builder", "--arch", m.Arch, "--download-only", m.BuildPath, m.ManifestPath})
 }
 
 // Build builds the flatpak using flatpak-builder
 func (m *FlatpakLinhpsdr) Build(c context.Context) *dagger.Container {
 	return m.BuildContainerWithFlatpakDependencies(c).
-		WithExec([]string{"flatpak-builder", "--disable-rofiles-fuse", "--force-clean", m.BuildPath, m.ManifestPath}, dagger.ContainerWithExecOpts{InsecureRootCapabilities: true})
+		WithExec([]string{"flatpak-builder", "--arch", m.Arch, "--disable-rofiles-fuse", "--force-clean", m.BuildPath, m.ManifestPath}, dagger.ContainerWithExecOpts{InsecureRootCapabilities: true})
 }
 
 // BuildDirectory returns the directory containing the built flatpak
