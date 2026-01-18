@@ -14,6 +14,8 @@ on:
       - ".gitmodules"
       - "io.github.g0orx.linhpsdr.*"
       - "*.patch"
+  schedule:
+    - cron: "0 6 * * 1"
 
 jobs:
   build:
