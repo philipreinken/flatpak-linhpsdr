@@ -6,6 +6,7 @@ command: linhpsdr
 finish-args:
   - --share=ipc
   - --device=dri
+  - --nosocket=wayland
   - --socket=fallback-x11
   - --socket=pulseaudio
   - --socket=wayland
