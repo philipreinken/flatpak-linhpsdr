@@ -83,7 +83,9 @@ func (m *FlatpakLinhpsdr) BuildContainer(c context.Context) *dagger.Container {
 		WithExec([]string{"apt-get", "install", "-y", "flatpak-builder", "flatpak", "gpg"}).
 		WithExec([]string{"flatpak", "remote-add", "--if-not-exists", "flathub", "https://flathub.org/repo/flathub.flatpakrepo"}).
 		With(m.withSourceDir(true)).
-		With(m.withGpgHomeDir())
+		With(m.withGpgHomeDir()).
+		With(m.withEmptyBuildDir()).
+		With(m.withEmptyRepoDir())
 }
 
 // BuildContainerWithFlatpakDependencies returns a container image with all build dependencies and downloads the flatpak dependencies
@@ -187,5 +189,17 @@ func (m *FlatpakLinhpsdr) withSourceDir(cwd bool) dagger.WithContainerFunc {
 func (m *FlatpakLinhpsdr) withGpgHomeDir() dagger.WithContainerFunc {
 	return func(c *dagger.Container) *dagger.Container {
 		return c.WithDirectory(m.GpgHomePath, m.GpgHomeDir)
+	}
+}
+
+func (m *FlatpakLinhpsdr) withEmptyBuildDir() dagger.WithContainerFunc {
+	return func(c *dagger.Container) *dagger.Container {
+		return c.WithDirectory(m.BuildPath, dag.Directory())
+	}
+}
+
+func (m *FlatpakLinhpsdr) withEmptyRepoDir() dagger.WithContainerFunc {
+	return func(c *dagger.Container) *dagger.Container {
+		return c.WithDirectory(m.RepoPath, dag.Directory())
 	}
 }

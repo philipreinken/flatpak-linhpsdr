@@ -1,5 +1,5 @@
 
-NAME := com.github.g0orx.linhpsdr
+NAME := io.github.g0orx.linhpsdr
 GPG_HOME := .gpg
 GPG_ID := 0x449FB7BE917E89D1163F18610D0EB7EC06BBDA5F
 REPO_DIR := .repo-$(NAME)
@@ -11,7 +11,7 @@ FLATPAKREPO := $(NAME).flatpakrepo
 
 DAGGER_CALL := dagger call --gpg-home-dir="$(GPG_HOME)" --gpg-key-id="$(GPG_ID)" --repo-path="$(REPO_DIR)" --build-path="$(BUILD_DIR)" --manifest-path="$(MANIFEST)" --source="."
 
-.PHONY: build sign serve stop install install-local-repo clean
+.PHONY: build terminal sign serve stop install install-local-repo clean
 
 $(SHARED_MODULES_DIR)/linux-audio: $(SHARED_MODULES_DIR)
 	git submodule update --init --recursive
@@ -28,13 +28,17 @@ $(FLATPAKREPO): $(REPO_DIR)
 	$(DAGGER_CALL) \
 		flatpakrepo-file export --path="$@"
 
+terminal:
+	$(DAGGER_CALL) \
+		build-container-with-flatpak-dependencies terminal
+
 build: $(REPO_DIR)
 
 serve: $(REPO_DIR)
 	$(DAGGER_CALL) \
 		serve up
 
-install: serve
+install: $(FLATPAKREPO)
 	flatpak remote-add --user --if-not-exists $(NAME)-repo $(FLATPAKREPO)
 	flatpak install --reinstall --user $(NAME)-repo $(NAME)
 
