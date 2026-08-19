@@ -26,9 +26,9 @@ jobs:
         run: |
           echo -n "${{ secrets.FLATPAK_REPO_SIGNING_KEY_HOME }}" | base64 -d | tar -xzf -
           git submodule update --init --recursive
-      - uses: dagger/dagger-for-github@d913e70051faf3b907d4dd96ef1161083c88c644 # v8.2.0
+      - uses: dagger/dagger-for-github@27b130bf0f79a7f6fbbbe0fbca6760dc9bb40a77 # v8.4.1
         with:
-          version: "v0.18.16" # Upgrade to .18 once https://github.com/dagger/dagger/pull/11011 is merged
+          version: "v0.21.4"
           cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
           verb: call
           args: >-
@@ -37,9 +37,9 @@ jobs:
             --gpg-key-id="${{ vars.FLATPAK_REPO_SIGNING_KEY_ID }}"
             repo-directory
             export --path="assets/"
-      - uses: dagger/dagger-for-github@d913e70051faf3b907d4dd96ef1161083c88c644 # v8.2.0
+      - uses: dagger/dagger-for-github@27b130bf0f79a7f6fbbbe0fbca6760dc9bb40a77 # v8.4.1
         with:
-          version: "v0.18.16"
+          version: "v0.21.4"
           cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
           verb: call
           args: >-
