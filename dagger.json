@@ -1,8 +1,9 @@
 {
   "name": "flatpak-linhpsdr",
-  "engineVersion": "v0.18.16",
+  "engineVersion": "v0.21.4",
   "sdk": {
     "source": "go"
   },
-  "source": "ci"
+  "source": "ci",
+  "disableDefaultFunctionCaching": true
 }
