@@ -51,8 +51,8 @@ modules:
       - make install PREFIX=/app
     sources:
       - type: git
-        url: https://github.com/g0orx/linhpsdr
-        commit: 87a629072b8375ee7ce586f4cd30ac0cb352593a
+        url: https://github.com/m5evt/linhpsdr
+        commit: b3c088041467c90abb6aea7e2d45d7881b4b6d78
       - type: patch
         path: linhpsdr.patch
       - type: file
